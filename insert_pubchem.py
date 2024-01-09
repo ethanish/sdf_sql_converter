@@ -1,7 +1,8 @@
 from zipfile import ZipFile 
 import gzip 
 import os 
- 
+import pandas as pd
+
 class directory_crawler: 
     def __init__(self, init_path: str): 
         self._root_directory = init_path 
@@ -25,6 +26,7 @@ class directory_crawler:
                 yield filepath
 
 class file_loader(directory_crawler):
+    total_sdf = -1
     file_name_list = []
     current_file_name = None
     file_cursor = -1
@@ -50,6 +52,7 @@ class file_loader(directory_crawler):
             # Archive file
             if (self.is_file_format(file_name, self._file_format + ".zip")):
                 self.file_name_list.append(file_name)
+        self.total_sdf = len(self.file_name_list)
 
     def is_file_format(self, file_name: str, file_format: str) -> bool:
         # TODO: Change to uppder case automatically
@@ -97,8 +100,33 @@ class file_loader(directory_crawler):
 
         return contents_buffer
 
+class convert_sdf_sql(file_loader):
+    def __init__(self, init_path, file_format=".sdf"):
+        #Parameter
+        self._root_directory = init_path
+        self._file_format = file_format
+        #Init Function
+        self.filter_file_format()
+        self.get_next_file_cursor()
+        self.current_mol_content = self.get_sdf_item()
 
-# class insert_sdf_db:
+    def create_sdf_sql(self):
+        # create as pandas df 
+        # pandas df to sql
+
+        pass
+
+    def generate_sdf_sql(self):
+        # Create to yield for generate function
+
+        pass
+
+    def save_as(self, type=".sql"):
+        # Type: .sql, .txt, ...
+
+        pass
+
+# class insert_sdf_db:asfd
 #     def __init__(self, directory, target_file_format):
 #         self._root_directory = directory
 #         # initializing empty file paths list 
@@ -117,17 +145,27 @@ class file_loader(directory_crawler):
 #                 file_content = f.read()
 #         print(file_content)
 #         return file_content
-    
+
 def test_code(): 
     sdf_full_path = '/mnt/d/DATABASES/PubChem/Compound/FULL/' 
     # calling function to get all file paths in the directory
-    iidb_obj = file_loader(sdf_full_path, '.sdf')
-    # printing the list of all files to be zipped 
-    iidb_obj.get_next_file_cursor()
-    one_mol_content = iidb_obj.get_sdf_item()
-    # print(iidb_obj.get_all_file_paths())
-    print("MOL 1")
-    print(one_mol_content)
+    iidb_obj = convert_sdf_sql(sdf_full_path, '.sdf')
+    
+    # print(iidb_obj.current_mol_content)
+
+    test_line = iidb_obj.current_mol_content
+
+    splited_mol_file = test_line.split("\n")
+    # Removed index & last end motif $$$$
+    current_contents = "\n".join(splited_mol_file[1:-2])
+    # Split again with appendix information indicator ">"
+    splited_current_contents = current_contents.split(">")
+
+    current_mol_dict = {}
+    current_mol_dict['index'] = splited_mol_file[0]
+    current_mol_dict['mol'] = splited_current_contents[0]
+    
+
 
 
 if __name__ == "__main__": 

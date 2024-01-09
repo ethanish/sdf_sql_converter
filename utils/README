@@ -1,0 +1,17 @@
+2024-01-08
+Written by Inseung Hwang
+
+<Download Packages>
+pip install mysql-connector-python
+
+<insert_externals.py>
++ insert_txt_as_sql::function
+- description: 
+- input:
+- output:
+
+<Preferences>
+Python				3.11.5
+mysql-connector-python          8.0.12
+
+
