@@ -4,7 +4,7 @@ import pandas as pd
 
 CURRENT_FILE_PATH = os.path.abspath(__file__)
 CURRENT_DIRECTORY = os.path.dirname(CURRENT_FILE_PATH)
-DB_CONFIG_PATH = f"%s/../external_data/chembl_uniprot_mapping.txt"%(CURRENT_DIRECTORY)
+DB_CONFIG_PATH = f"%s/../data/external_data/chembl_uniprot_mapping.txt"%(CURRENT_DIRECTORY)
 
 def load_db_config(file_path):
     with open(file_path, 'r') as config_file:
